@@ -13,7 +13,7 @@ impl Lexer {
     // Main interface functions
     
     /// Creates a new lexer from on a string
-    pub fn new(input: String) -> Self {
+    pub fn new(input: &String) -> Self {
         let mut lexer = Self{ 
             input: input.as_bytes().to_vec(), 
             position: 0, read_position: 0, 
@@ -54,6 +54,7 @@ impl Lexer {
                         }
                     }
                     '+' => new_token(TokenType::PLUS, x),
+                    '-' => new_token(TokenType::MINUS, x),
                     '/' => new_token(TokenType::SLASH, x),
                     '*' => new_token(TokenType::ASTERISK, x),
                     '<' => new_token(TokenType::LT, x),
@@ -76,7 +77,6 @@ impl Lexer {
                             read_char = false;
                             Token { token_type: TokenType::INT, literal }
                         } else {
-                            println!("{}", self.ch.unwrap() as char);
                             new_token(TokenType::ILLEGAL, self.ch.unwrap())
                         }
                     }
@@ -117,16 +117,18 @@ impl Lexer {
 
     /// Skips through all the white space in the string
     fn skip_whitespace(&mut self) {
-        match self.ch {
-            Some(_) => {
-                while self.ch.unwrap() == ' ' as u8 || self.ch.unwrap() == '\t' as u8 
-                || self.ch.unwrap() == '\n' as u8 || self.ch.unwrap() == '\r' as u8 {
-                    self.read_char();
+        loop {
+            match self.ch {
+                Some(x) => {
+                    if !(x == ' ' as u8 || x == '\t' as u8 
+                    || x == '\n' as u8 || x == '\r' as u8) {
+                        break;
+                    }
+                    self.read_char()
                 }
+                // Do nothing if none
+                None => break,
             }
-            // Do nothing if none
-            None => (),
-        
         }
     }
 
@@ -163,7 +165,6 @@ impl Lexer {
 
     /// Determines if the function is a digit 
     fn is_digit(&self) -> bool {
-        print!("{}", self.ch.unwrap() as char);
        '0' as u8 <= self.ch.unwrap() && self.ch.unwrap() <= '9' as u8 
     }
 

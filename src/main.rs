@@ -8,4 +8,6 @@ mod tests;
 
 fn main() {
     println!("Welcome to the monkey programming language");
+    
+    repl::start();
 }

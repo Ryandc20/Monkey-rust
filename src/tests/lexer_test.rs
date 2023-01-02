@@ -15,7 +15,7 @@ let add = fn(x, y) {
 };"
         ); 
 
-        let mut lexer = Lexer::new(input);
+        let mut lexer = Lexer::new(&input);
 
         let tests = [
             Token { token_type: TokenType::LET, literal: String::from("let")},
@@ -54,7 +54,7 @@ let add = fn(x, y) {
     #[test]
     fn simple() {
         let input = String::from("let       =");
-        let mut lexer = Lexer::new(input);
+        let mut lexer = Lexer::new(&input);
 
         let token = lexer.next_token();
         assert_eq!(token.token_type, TokenType::LET);
